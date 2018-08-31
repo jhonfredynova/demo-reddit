@@ -1,0 +1,10 @@
+footer {
+  border-top: 1px solid #CCC;
+  margin-top: 20px;
+  padding: 20px;
+  display: block;
+}
+
+footer a{
+  color: #333;
+}
