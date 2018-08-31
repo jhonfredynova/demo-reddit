@@ -21,9 +21,9 @@ class Main extends Component {
       this.props.dispatch(showLoading())
       await this.props.dispatch(getConfig())
       const { config } = this.props.app
-      await moment.locale(config.language)      
-      await this.props.dispatch(setTranslations(config.locales))
-      await this.props.dispatch(setLanguage(config.language))
+      await moment.locale(config.appLanguage)      
+      await this.props.dispatch(setTranslations(config.appLocales))
+      await this.props.dispatch(setLanguage(config.appLanguage))
       await this.props.dispatch(hideLoading())
     }catch(e){
       this.props.dispatch(setMessage({ type: 'error', message: e.message, hideClose: true }))

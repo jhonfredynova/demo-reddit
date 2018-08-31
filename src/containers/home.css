@@ -5,10 +5,40 @@
 }
 #home .sidebar{
   position: absolute;
-  background-color: white;
+  background-color: black;
   max-width: 250px;
   padding-right: 15px;
   z-index: 1050!important;
+}
+#home .sidebar .box{
+  width: 250px;
+}
+#home .sidebar .header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: #222;
+  color: white;
+}
+#home .sidebar .content{
+  position: fixed;
+  top: 70px;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  background-color: #222;
+  overflow: auto;
+}
+#home .sidebar .footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: #222;
+  color: white;
 }
 #home .sidebarRoot{
   padding: 15px

@@ -16,8 +16,7 @@ export default function reducer(
     case POST.GET:
       return { 
         ...state, 
-        posts: handleResponseAction(ACTION.GET, state.posts, action.payload.find || state.posts),
-        temp: handleResponseAction(ACTION.TEMP, state.temp, action.payload.findOne)
+        posts: handleResponseAction(ACTION.GET, state.posts, action.payload)
       }
 
     case POST.SAVE:

@@ -10,7 +10,7 @@ export const POST = {
 
 export function getPost(parameters) {
   return dispatch  => {
-    return axios.get(`${process.env.REACT_APP_LOCAL_API_URL}/post?${handleRequestQuery(parameters)}`)
+    return axios.get(`${process.env.REACT_APP_LOCAL_API_URL}?${handleRequestQuery(parameters)}`)
     .then(response => dispatch({type: POST.GET, payload: handleResponseQuery(response)}) )
     .catch(err => handleError(err) )
   }

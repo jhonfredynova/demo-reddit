@@ -5,7 +5,10 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { set } from 'lodash'
 import { hideLoading, showLoading, setMessage } from 'actions/appActions'
+import { getPost } from 'actions/postActions'
 import NavigationBar from 'components/navigationBar'
+import Pager from 'components/pager'
+import PostDetail from 'components/postDetail'
 import Seo from 'components/seo'
 import './home.css'
 const sidebarMql = window.matchMedia(`(min-width: 768px)`)
@@ -19,19 +22,24 @@ class Home extends Component {
     this.state = {
       sidebarDocked: sidebarMql.matches,
       sidebarOpen: false,
-      posts: this.props.post.posts.records
+      posts: this.props.post.posts,
+      postQuery: {
+        template: 'scroll',
+        pageSize: 10
+      }
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      posts: nextProps.post.posts.records
+      posts: nextProps.post.posts
     })
   }
 
   async componentWillMount(){
     try{
       this.props.dispatch(showLoading())
+      await this.props.dispatch(getPost(this.state.postQuery))
       sidebarMql.addListener(this.handleMediaQuery)
       document.addEventListener('keydown', this.handlePressKey, false)
       this.props.dispatch(hideLoading())
@@ -75,10 +83,43 @@ class Home extends Component {
     }
   }
 
+  async handleChangeSearch(data){
+    try{
+      this.props.dispatch(showLoading())
+      await this.setState({ postQuery: Object.assign(this.state.postQuery, data) })
+      await this.props.dispatch(getPost(this.state.postQuery))
+      this.props.dispatch(hideLoading())
+    }catch(e){
+      this.props.dispatch(setMessage({ type: 'error', message: e.message }))
+      this.props.dispatch(hideLoading())
+    }
+  }
+
   render() {
+    const { isLoading } = this.props.app.config
+    const { records } = this.state.posts
+    const posts = (
+      <div className="box">
+        <div className="header text-center">
+          <h2>Reddit Posts</h2>
+        </div>
+        <div className="content">
+          <Pager isLoading={isLoading} data={this.state.postQuery} items={this.state.posts} onChange={this.handleChangeSearch.bind(this)}>
+            {
+              records.map((item, index) => 
+                <PostDetail data={{ info: item.data }}></PostDetail>
+              )
+            }
+          </Pager>
+        </div>
+        <div className="footer text-center">
+          <h2>Dismiss All</h2>
+        </div>
+      </div>
+    )
     return (
       <div id="home">
-        <Sidebar rootClassName='sidebarRoot' sidebarClassName='sidebar' contentClassName='sidebarContent' overlayClassName='sidebarOverlay' docked={this.state.sidebarDocked} sidebar={<p>Hola</p>} open={this.state.sidebarOpen} onSetOpen={() => this.handleChangeState('sidebarOpen',false)}>
+        <Sidebar rootClassName='sidebarRoot' sidebarClassName='sidebar' contentClassName='sidebarContent' overlayClassName='sidebarOverlay' docked={this.state.sidebarDocked} sidebar={posts} open={this.state.sidebarOpen} onSetOpen={() => this.handleChangeState('sidebarOpen',false)}>
           <Seo data={{ title: 'Home', description: 'Welcome', keyword: ['jhonfredynova'], siteName: 'React' }} />
           <NavigationBar data={{ title: <h1>Home</h1>, subTitle: <h2>Welcome</h2>, btnLeft: <button className={classnames({"btn btn-success": true, "hide": this.state.sidebarDocked})} onClick={() => this.handleChangeState('sidebarOpen', !this.state.sidebarOpen)}><i className="glyphicon glyphicon-chevron-right" /></button> }} />
         </Sidebar>

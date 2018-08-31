@@ -82,7 +82,7 @@ class Pager extends Component {
             <Pagination bsClass="pagination" bsSize="medium" prev next ellipsis boundaryLinks maxButtons={3} items={Math.ceil(recordsTotal/this.state.pageSize)} activePage={this.state.activePage} onSelect={value => this.handleChangeState('activePage', value)} />
           </div>
           <div className={classnames({ 'text-center': true, 'hide': (!thereIsData || template==='grid') })}>
-            <p onClick={() => this.handleChangeState('pageSize', parseInt(this.state.pageSize+this.state.pageSize))}>Load more</p>
+            <button className="btn btn-default" onClick={() => this.handleChangeState('pageSize', parseInt(this.state.pageSize+this.state.pageSize,10))}>Load more</button>
           </div>
         </section>
       </div>

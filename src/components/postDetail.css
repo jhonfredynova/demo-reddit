@@ -1,0 +1,26 @@
+#postDetail{
+  color: white;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+#postDetail:hover{
+  opacity: 0.8;
+}
+#postDetail h2{
+  font-size: 14px;
+}
+#postDetail a,
+#postDetail a:link
+#postDetail a:active,
+#postDetail a:focus,
+#postDetail a:hover,
+#postDetail a:visited{
+  color: orange
+}
+#postDetail .postContent,
+#postDetail .postOptions{
+  padding: 10px;
+}
+#postDetail .postContent .description{
+  max-width: 150px;
+}

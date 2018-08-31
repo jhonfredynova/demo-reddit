@@ -1,5 +1,6 @@
 import shortid from 'shortid'
 import { isEqual, pick } from 'lodash'
+import app from 'app'
 
 export const APP = {
   HIDE_LOADING: 'HIDE_LOADING',
@@ -28,14 +29,7 @@ export function showLoading() {
 
 export function getConfig() {
   return (dispatch) => {
-    let response = {
-      appDisabled: false,
-      appLogo: '/favicon.png',
-      appName: 'Reddit',
-      language: 'en',
-      locales: { en: {}, es: {} }
-    }
-    dispatch({ type: APP.GET_CONFIG, payload: response })
+    dispatch({ type: APP.GET_CONFIG, payload: app.config })
   }
 }
 

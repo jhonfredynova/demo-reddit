@@ -1,4 +1,4 @@
-import { get, isArray, isObject, isString, join } from 'lodash'
+import { get, isObject } from 'lodash'
 
 //CONSTANTS
 export const ACTION = {
@@ -12,25 +12,14 @@ export const ACTION = {
 
 //REQUESTS
 export function handleError(e){
-  let message = null
-  let messageDetail = get(e,'response.data', null) 
-  if(isString(messageDetail) && !message) message = messageDetail
-  if(isObject(messageDetail) && !message) message = get(messageDetail, 'message', null)
-  if(isObject(messageDetail) && !message) message = get(messageDetail, 'raw', null)
-  if(isObject(messageDetail) && !message) message = get(messageDetail, 'details', null)  
-  if(!message) message = e.message
-  throw new Error(message)
+  throw new Error(e.message)
 }
 
 export function handleRequestQuery(data){
   let params = {}
   for(let key in data){
-    if(key==='activePage') params.skip = (data.activePage<=1 ? 0 : ((data.activePage-1)*data.pageSize))
-    else if(key==='pageSize') params.limit = data.pageSize
-    else if(key==='populate') params.populate = isArray(data.populate) ? join(data.populate,',') : data.populate
-    else if(key==='select') params.select = join(data.select,',')
-    else if(key==='sort') params.sort = data.sort
-    else if(key==='where') params.where = data.where
+    if(key==='activePage') params.count = (data.activePage<=1 ? 0 : ((data.activePage-1)*data.pageSize))
+    else if(key==='pageSize') params.limit = data.pageSize-1
     else params[key] = data[key]
   }
   let queryString = []
@@ -89,13 +78,9 @@ export function handleResponseAction(action, state, payload){
 }
 
 export function handleResponseQuery(data){
-  let response = { find: null, findOne: null }
-  if(data.headers['content-records']){
-    response.find = {}
-    response.find.records = data.data
-    response.find.recordsTotal = parseInt(data.headers['content-records'], 0)
-  }else{
-    response.findOne = data.data
+  let response = { 
+    records: get(data, 'data.data.children', []), 
+    recordsTotal: get(data.data, 'data.data.dist', 0)
   }
   return response
 }
