@@ -1,0 +1,29 @@
+#home{
+  position: relative;
+  min-height: 600px;
+  max-height: 600px;
+}
+#home .sidebar{
+  position: absolute;
+  background-color: white;
+  max-width: 250px;
+  padding-right: 15px;
+  z-index: 1050!important;
+}
+#home .sidebarRoot{
+  padding: 15px
+}
+#home .sidebarContent{
+  overflow-y: hidden!important;
+  padding-left: 15px;
+}
+#home .sidebarOverlay{
+  z-index: 1040!important;
+}
+
+@media only screen and (max-width: 768px) {
+  #home .sidebar{
+    position: fixed!important;
+    padding: 15px;
+  }
+}
