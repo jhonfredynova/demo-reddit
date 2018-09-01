@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import { defaultTo } from 'lodash'
 import 'components/postDetail.css'
@@ -35,7 +36,7 @@ class PostDetail extends React.Component {
     return (
       <div id="postDetail" className={className} onClick={this.handleSelect.bind(this)}>
         <h2 className="text-left">
-          <i className={classnames({'glyphicon glyphicon-certificate text-primary': true, 'hide': info.visited})} /> {info.name}
+          <i className={classnames({'glyphicon glyphicon-certificate text-primary': true, 'hide': info.visited})} /> {info.name} <small>{moment(info.created).fromNow()}</small>
         </h2>
         <div className="media">
           {
@@ -56,6 +57,7 @@ class PostDetail extends React.Component {
           <div className="clearfix" />
         </div>
       </div>
+      
     )
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import Sidebar from "react-sidebar"
 import { connect } from 'react-redux'
 import classnames from 'classnames'
@@ -144,8 +145,10 @@ class Home extends Component {
         <div className="content">
           <Pager isLoading={isLoading} data={this.state.postQuery} items={this.state.posts} onChange={this.handleChangeSearch.bind(this)}>
             {
-              records.map((item, index) => 
-                <PostDetail key={item.data.id} data={{ info: item.data }} onSelect={this.handleSelectPost.bind(this, item)} onDismiss={this.handleDismissPost.bind(this, item)}></PostDetail>
+              records.map((item, index) =>
+                <ReactCSSTransitionGroup transitionName="post" transitionEnterTimeout={500} transitionLeaveTimeout={300}> 
+                  <PostDetail key={item.data.id} data={{ info: item.data }} onSelect={this.handleSelectPost.bind(this, item)} onDismiss={this.handleDismissPost.bind(this, item)}></PostDetail>
+                </ReactCSSTransitionGroup>
               )
             }
           </Pager>

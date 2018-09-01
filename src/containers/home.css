@@ -62,3 +62,18 @@
     padding: 15px;
   }
 }
+/* animations */
+#home .post-enter {
+  opacity: 0.01;
+}
+#home .post-enter.post-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+#home .post-leave {
+  opacity: 1;
+}
+#home .post-leave.post-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

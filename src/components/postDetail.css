@@ -3,8 +3,8 @@
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
-#postDetail:hover{
-  opacity: 0.8;
+#postDetail:active{
+  opacity: 0.4;
 }
 #postDetail h2{
   font-size: 16px;
