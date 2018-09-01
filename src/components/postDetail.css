@@ -7,20 +7,22 @@
   opacity: 0.8;
 }
 #postDetail h2{
-  font-size: 14px;
+  font-size: 16px;
+  padding: 10px;
+  margin: 0px;
 }
 #postDetail a,
 #postDetail a:link
 #postDetail a:active,
 #postDetail a:focus,
 #postDetail a:hover,
-#postDetail a:visited{
+#postDetail a:visited,
+#postDetail .postOptions{
   color: orange
 }
-#postDetail .postContent,
 #postDetail .postOptions{
   padding: 10px;
 }
-#postDetail .postContent .description{
-  max-width: 150px;
+#postDetail .caption{
+  padding-left: 10px;
 }

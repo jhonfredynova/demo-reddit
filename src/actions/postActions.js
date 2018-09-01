@@ -18,7 +18,8 @@ export function getPost(parameters) {
 
 export function savePost(data) {
   return dispatch => {
-    return axios.post(`${process.env.REACT_APP_LOCAL_API_URL}/post`, data)
+    //return axios.post(`${process.env.REACT_APP_LOCAL_API_URL}/post`, data)
+    return new Promise(resolve => resolve({ data: data }))
     .then(response => dispatch({type: POST.SAVE, payload: response.data}) )
     .catch(err => handleError(err) )
   }
@@ -26,7 +27,8 @@ export function savePost(data) {
 
 export function updatePost(data) {
   return dispatch => {
-    return axios.patch(`${process.env.REACT_APP_LOCAL_API_URL}/post/${data.id}`, data)
+    //return axios.patch(`${process.env.REACT_APP_LOCAL_API_URL}/post/${data.id}`, data)
+    return new Promise(resolve => resolve({ data: data }))
     .then(response => dispatch({type: POST.UPDATE, payload: response.data}) )
     .catch(err => handleError(err) )
   }
@@ -34,7 +36,8 @@ export function updatePost(data) {
 
 export function deletePost(data) {
   return dispatch => {
-    return axios.delete(`${process.env.REACT_APP_LOCAL_API_URL}/post/${data.id}`)
+    //return axios.delete(`${process.env.REACT_APP_LOCAL_API_URL}/post/${data.id}`)
+    return new Promise(resolve => resolve({ data: data }))
     .then(response => dispatch({type: POST.DELETE, payload: response.data}) )
     .catch(err => handleError(err) )
   }

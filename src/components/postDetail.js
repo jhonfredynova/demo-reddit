@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { defaultTo } from 'lodash'
 import 'components/postDetail.css'
@@ -15,20 +16,40 @@ class PostDetail extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState(nextProps.data)
   }
+
+  async handleSelect(){
+    if(this.props.onSelect) this.props.onSelect()
+  }
+
+  async handleDismiss(){
+    if(this.props.onDismiss) this.props.onDismiss() 
+  }
+
+  async handleDismissAll(){
+    if(this.props.onDismissAll) this.props.onDismissAll() 
+  }
   
   render() {
     const { info } = this.state
     const { className } = this.props.data
     return (
-      <div id="postDetail" className={className}>
-        <h2 className="text-center">{info.name}</h2>
-        <div className="postContent">
-          <span className="pull-left"><img src={info.thumbnail} alt={info.title} width={90} /></span>
-          <span className="pull-right description">{info.title}></span>
-          <div className="clearfix" />
+      <div id="postDetail" className={className} onClick={this.handleSelect.bind(this)}>
+        <h2 className="text-left">
+          <i className={classnames({'glyphicon glyphicon-certificate text-primary': true, 'hide': info.visited})} /> {info.name}
+        </h2>
+        <div className="media">
+          {
+            !info.thumbnail ? null :
+            <div className="media-left">
+              <img className="media-object" src={info.thumbnail} alt={info.title} />
+            </div>
+          }
+          <div className="media-body caption">
+            <span>{info.title}></span>
+          </div>
         </div>
         <div className="postOptions">
-          <a href="javascript:void(0)" className="pull-left"><i className="glyphicon glyphicon-remove-circle" /> Dismiss Post</a>
+          <span className="pull-left" onClick={this.handleDismiss.bind(this)}><i className="glyphicon glyphicon-remove-circle" /> Dismiss Post</span>
           <span className="pull-right">
             {info.num_comments} comments
           </span>

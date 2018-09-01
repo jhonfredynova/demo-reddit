@@ -3,9 +3,9 @@ import Sidebar from "react-sidebar"
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import { set } from 'lodash'
+import { isEmpty, set } from 'lodash'
 import { hideLoading, showLoading, setMessage } from 'actions/appActions'
-import { getPost } from 'actions/postActions'
+import { getPost, updatePost, deletePost } from 'actions/postActions'
 import NavigationBar from 'components/navigationBar'
 import Pager from 'components/pager'
 import PostDetail from 'components/postDetail'
@@ -22,6 +22,7 @@ class Home extends Component {
     this.state = {
       sidebarDocked: sidebarMql.matches,
       sidebarOpen: false,
+      postDetail: {},
       posts: this.props.post.posts,
       postQuery: {
         template: 'scroll',
@@ -95,9 +96,46 @@ class Home extends Component {
     }
   }
 
+  async handleSelectPost(post){
+    try{
+      this.props.dispatch(showLoading())
+      post.data.visited = true
+      await this.props.dispatch(updatePost(post))
+      await this.handleChangeState('postDetail', post.data)
+      this.props.dispatch(hideLoading())
+    }catch(e){
+      this.props.dispatch(setMessage({ type: 'error', message: e.message }))
+      this.props.dispatch(hideLoading())
+    }
+  }
+
+  async handleDismissPost(post){
+    try{
+      this.props.dispatch(showLoading())
+      await this.props.dispatch(deletePost(post))
+      this.props.dispatch(hideLoading())
+    }catch(e){
+      this.props.dispatch(setMessage({ type: 'error', message: e.message }))
+      this.props.dispatch(hideLoading())
+    }
+  }
+
+  async handleDismissAll(){
+    try{
+      this.props.dispatch(showLoading())
+      const { records } = this.state.posts
+      for(let post of records) await this.props.dispatch(deletePost(post))
+      this.props.dispatch(hideLoading())
+    }catch(e){
+      this.props.dispatch(setMessage({ type: 'error', message: e.message }))
+      this.props.dispatch(hideLoading())
+    }
+  }
+
   render() {
     const { isLoading } = this.props.app.config
     const { records } = this.state.posts
+    const { postDetail } = this.state
     const posts = (
       <div className="box">
         <div className="header text-center">
@@ -107,21 +145,28 @@ class Home extends Component {
           <Pager isLoading={isLoading} data={this.state.postQuery} items={this.state.posts} onChange={this.handleChangeSearch.bind(this)}>
             {
               records.map((item, index) => 
-                <PostDetail data={{ info: item.data }}></PostDetail>
+                <PostDetail key={item.data.id} data={{ info: item.data }} onSelect={this.handleSelectPost.bind(this, item)} onDismiss={this.handleDismissPost.bind(this, item)}></PostDetail>
               )
             }
           </Pager>
         </div>
         <div className="footer text-center">
-          <h2>Dismiss All</h2>
+          <span onClick={this.handleDismissAll.bind(this)}>Dismiss All</span>
         </div>
       </div>
     )
     return (
       <div id="home">
         <Sidebar rootClassName='sidebarRoot' sidebarClassName='sidebar' contentClassName='sidebarContent' overlayClassName='sidebarOverlay' docked={this.state.sidebarDocked} sidebar={posts} open={this.state.sidebarOpen} onSetOpen={() => this.handleChangeState('sidebarOpen',false)}>
-          <Seo data={{ title: 'Home', description: 'Welcome', keyword: ['jhonfredynova'], siteName: 'React' }} />
-          <NavigationBar data={{ title: <h1>Home</h1>, subTitle: <h2>Welcome</h2>, btnLeft: <button className={classnames({"btn btn-success": true, "hide": this.state.sidebarDocked})} onClick={() => this.handleChangeState('sidebarOpen', !this.state.sidebarOpen)}><i className="glyphicon glyphicon-chevron-right" /></button> }} />
+          <Seo data={{ title: postDetail.name, description: postDetail.title, keyword: ['jhonfredynova'], siteName: 'React' }} />
+          <NavigationBar data={{ title: <h1>{postDetail.name}</h1>, subTitle: <h2>{postDetail.title}</h2>, btnLeft: <button className={classnames({"btn btn-success": true, "hide": this.state.sidebarDocked})} onClick={() => this.handleChangeState('sidebarOpen', !this.state.sidebarOpen)}><i className="glyphicon glyphicon-chevron-right" /></button> }} />
+          <div className="text-center">
+            <img className={classnames({'hide': !isEmpty(postDetail) })} src={postDetail.thumbnail} alt={postDetail.title} width={200} />
+            <div className={classnames({'hide': isEmpty(postDetail) })}>
+              <h1><i className="fa fa-chain-broken fa-2x" /></h1>
+              <p>There is not image available to display.</p>
+            </div>
+          </div>
         </Sidebar>
       </div>
     )

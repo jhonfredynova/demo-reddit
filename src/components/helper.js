@@ -39,7 +39,7 @@ export function handleResponseAction(action, state, payload){
     case ACTION.DELETE:
       state = {
         ...state,
-        records: state.records.filter(item => item.id!==payload.id),
+        records: state.records.filter(item => item.data.id!==payload.data.id),
         recordsTotal: state.recordsTotal-1
       }
       break
@@ -60,7 +60,7 @@ export function handleResponseAction(action, state, payload){
     case ACTION.UPDATE:
       state = {
         ...state, 
-        records: state.records.map(item => (item.id===payload.id) ? payload : item),
+        records: state.records.map(item => (item.data.id===payload.data.id) ? payload : item),
         recordsTotal: state.recordsTotal
       }
       break
